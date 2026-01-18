@@ -1,0 +1,76 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}New Check-in{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm border-0 rounded-4" style="max-width: 900px;">
+    <div class="card-body p-4">
+      <h1 class="h4 mb-3">New Check-in</h1>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Date</label>
+            {{ form.date }}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Weight (lb)</label>
+            {{ form.weight_lb }}
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Body Fat %</label>
+            {{ form.bodyfat_percent }}
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Muscle (lb)</label>
+            {{ form.muscle_lb }}
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Waist (in)</label>
+            {{ form.waist_in }}
+          </div>
+	<div class="col-md-4">
+  	  <label class="form-label">Chest (in)</label>
+ 	  {{ form.chest_in }}
+	</div>
+
+	<div class="col-md-4">
+  	  <label class="form-label">Hips (in)</label>
+  	  {{ form.hips_in }}
+	</div>
+
+	<div class="col-md-4">
+  	   <label class="form-label">Biceps (in)</label>
+ 	   {{ form.biceps_in }}
+	</div>
+
+	<div class="col-md-4">
+  	  <label class="form-label">Thigh (in)</label>
+  	  {{ form.thigh_in }}
+	</div>
+
+	<div class="col-md-4">
+  	   <label class="form-label">Calf (in)</label>
+ 	   {{ form.calf_in }}
+	</div>
+
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            {{ form.notes }}
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a class="btn btn-outline-secondary" href="/checkins/">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

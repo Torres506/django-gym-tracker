@@ -1,0 +1,145 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}Check-ins{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">Check-ins</h1>
+      <div class="text-secondary small">Body metrics over time</div>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{% url 'checkin_create' %}">+ Add check-in</a>
+  </div>
+
+  {# Quick Stats #}
+  {% if latest %}
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body py-3">
+            <div class="text-secondary small">Latest Weight</div>
+            <div class="fs-4 fw-semibold">
+              {{ latest.weight_lb }} lb
+              {% if weight_delta is not None %}
+                <span class="small fw-normal text-secondary ms-2">
+                  ({% if weight_delta > 0 %}+{% endif %}{{ weight_delta }} vs prev)
+                </span>
+              {% endif %}
+            </div>
+            <div class="text-secondary small">{{ latest.date }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body py-3">
+            <div class="text-secondary small">Latest Waist</div>
+            <div class="fs-4 fw-semibold">
+              {{ latest.waist_in|default:"—" }}{% if latest.waist_in %} in{% endif %}
+              {% if waist_delta is not None %}
+                <span class="small fw-normal text-secondary ms-2">
+                  ({% if waist_delta > 0 %}+{% endif %}{{ waist_delta }} vs prev)
+                </span>
+              {% endif %}
+            </div>
+            <div class="text-secondary small">
+              BF: {{ latest.bodyfat_percent|default:"—" }}{% if latest.bodyfat_percent %}%{% endif %}
+              ·
+              Muscle: {{ latest.muscle_lb|default:"—" }}{% if latest.muscle_lb %} lb{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+      {% if checkins %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3 text-nowrap">Date</th>
+                <th class="text-nowrap">Weight</th>
+                <th class="text-nowrap">Body Fat %</th>
+                <th class="text-nowrap">Muscle</th>
+                <th class="text-nowrap">Waist</th>
+                <th style="width: 45%;">Notes</th>
+                <th class="pe-3 text-end text-nowrap">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for c in checkins %}
+                <tr>
+                  <td class="ps-3 text-nowrap">{{ c.date }}</td>
+                  <td class="text-nowrap">{{ c.weight_lb }} lb</td>
+                  <td class="text-nowrap">{{ c.bodyfat_percent|default:"—" }}</td>
+                  <td class="text-nowrap">{{ c.muscle_lb|default:"—" }}</td>
+                  <td class="text-nowrap">{{ c.waist_in|default:"—" }}</td>
+
+                  <td class="text-secondary" style="max-width: 520px; white-space: normal;">
+                    {{ c.notes|default:"—" }}
+                  </td>
+
+                  <td class="pe-3 text-end text-nowrap">
+                    {% if c.chest_in or c.hips_in or c.biceps_in or c.thigh_in or c.calf_in %}
+                      <button class="btn btn-sm btn-outline-secondary"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#m{{ c.pk }}"
+                              aria-expanded="false"
+                              aria-controls="m{{ c.pk }}">
+                        Measurements
+                      </button>
+                    {% else %}
+                      <span class="text-muted small me-2">No measurements</span>
+                    {% endif %}
+
+                    <a class="btn btn-sm btn-outline-primary ms-1"
+                       href="{% url 'checkin_edit' c.pk %}">
+                      Edit
+                    </a>
+
+                    <a class="btn btn-sm btn-outline-danger ms-1"
+                       href="{% url 'checkin_delete' c.pk %}"
+                       onclick="return confirm('Delete this check-in?');">
+                      Delete
+                    </a>
+                  </td>
+                </tr>
+
+                <tr class="collapse" id="m{{ c.pk }}">
+                  <td colspan="7" class="bg-light">
+                    <div class="px-3 py-2 small">
+                      <span class="fw-semibold">Measurements:</span>
+
+                      {% if c.chest_in %}<span class="ms-2">Chest: {{ c.chest_in }} in</span>{% endif %}
+                      {% if c.hips_in %}<span class="ms-2">Hips: {{ c.hips_in }} in</span>{% endif %}
+                      {% if c.biceps_in %}<span class="ms-2">Biceps: {{ c.biceps_in }} in</span>{% endif %}
+                      {% if c.thigh_in %}<span class="ms-2">Thigh: {{ c.thigh_in }} in</span>{% endif %}
+                      {% if c.calf_in %}<span class="ms-2">Calf: {{ c.calf_in }} in</span>{% endif %}
+
+                      {% if not c.chest_in and not c.hips_in and not c.biceps_in and not c.thigh_in and not c.calf_in %}
+                        <span class="text-muted ms-2">—</span>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      {% else %}
+        <div class="p-4">
+          <div class="fw-semibold">No check-ins yet.</div>
+          <div class="text-secondary">Add your first measurement to see it here.</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
