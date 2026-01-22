@@ -1,0 +1,47 @@
+{% extends "checkins/base.html" %}
+{% block title %}Add set{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+	<h1 class="h3 mb-0">
+	  {% if editing %}Edit set{% else %}Add set{% endif %}
+	</h1>
+      <div class="text-secondary small">
+        {{ item.exercise.name }} · {{ item.get_equipment_display }}
+      </div>
+    </div>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'workout_detail' item.workout.pk %}">Back</a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Set #</label>
+            {{ form.set_number }}
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Reps</label>
+            {{ form.reps }}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Weight (lb)</label>
+            {{ form.weight_lb }}
+          </div>
+        </div>
+
+        <div class="mt-3">
+	<button class="btn btn-primary">
+	  {% if editing %}Update{% else %}Save set{% endif %}
+	</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

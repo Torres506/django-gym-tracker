@@ -1,0 +1,153 @@
+{% extends "checkins/base.html" %}
+{% block title %}Stats{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">Stats</h1>
+      <div class="text-secondary small">As of {{ today }}</div>
+    </div>
+
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'workout_list' %}">
+      Back to workouts
+    </a>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Total workouts</div>
+          <div class="display-6 fw-semibold">{{ total_workouts }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Workouts (7d)</div>
+          <div class="display-6 fw-semibold">{{ workouts_7 }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Workouts (30d)</div>
+          <div class="display-6 fw-semibold">{{ workouts_30 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Exercises logged</div>
+          <div class="h2 fw-semibold mb-0">{{ total_items }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Total sets</div>
+          <div class="h2 fw-semibold mb-0">{{ total_sets }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Total reps</div>
+          <div class="h2 fw-semibold mb-0">{{ total_reps }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <div class="text-secondary small">Total volume (lb)</div>
+          <div class="h2 fw-semibold mb-0">{{ total_volume|floatformat:0 }}</div>
+          <div class="text-secondary small">weight × reps (ignores blank weight)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Top exercises by volume</h2>
+
+          {% if top_by_volume %}
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Exercise</th>
+                    <th class="text-end">Volume</th>
+                    <th class="text-end">Sets</th>
+                    <th class="text-end">Reps</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in top_by_volume %}
+                    <tr>
+                      <td>{{ row.workout_exercise__exercise__name }}</td>
+                      <td class="text-end">{{ row.volume|floatformat:0 }}</td>
+                      <td class="text-end">{{ row.sets }}</td>
+                      <td class="text-end">{{ row.reps }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-secondary">No weighted sets yet.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Top exercises by reps</h2>
+
+          {% if top_by_reps %}
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Exercise</th>
+                    <th class="text-end">Reps</th>
+                    <th class="text-end">Sets</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in top_by_reps %}
+                    <tr>
+                      <td>{{ row.workout_exercise__exercise__name }}</td>
+                      <td class="text-end">{{ row.reps }}</td>
+                      <td class="text-end">{{ row.sets }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-secondary">No sets yet.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

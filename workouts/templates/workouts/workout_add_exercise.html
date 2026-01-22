@@ -1,0 +1,79 @@
+{% extends "checkins/base.html" %}
+{% block title %}Add exercise{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">Add exercise</h1>
+      <div class="text-secondary small">
+        Workout: {{ workout.date }}{% if workout.title %} · {{ workout.title }}{% endif %}
+      </div>
+    </div>
+
+    <a class="btn btn-sm btn-outline-secondary"
+       href="{% url 'workout_detail' workout.pk %}">
+      Back
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+
+      {# Step 1: Muscle dropdown (GET) auto-submits on change #}
+      <form method="get" class="mb-3" id="muscleForm">
+        <label class="form-label" for="id_category">Muscle group</label>
+        {{ form.category }}
+
+        {% if selected_category %}
+          <div class="mt-2">
+            <a class="btn btn-outline-secondary btn-sm"
+               href="{% url 'workout_add_exercise' workout.pk %}">
+              Clear
+            </a>
+          </div>
+        {% endif %}
+      </form>
+
+      <hr class="my-3">
+
+      {# Step 2: Exercise + Equipment (POST) #}
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {# keep selected category on POST so the form stays filtered #}
+        <input type="hidden" name="category" value="{{ selected_category }}">
+
+        <div class="mb-3">
+          <label class="form-label" for="id_exercise">Exercise</label>
+          {{ form.exercise }}
+
+          {% if not selected_category %}
+            <div class="form-text">
+              Choose a muscle group first to shorten the exercise list.
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="id_equipment">Equipment</label>
+          {{ form.equipment }}
+        </div>
+
+        <button class="btn btn-primary" type="submit">Add</button>
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    // Auto-submit muscle dropdown (no filter button)
+    (function () {
+      const el = document.getElementById("id_category");
+      if (el) {
+        el.addEventListener("change", function () {
+          document.getElementById("muscleForm").submit();
+        });
+      }
+    })();
+  </script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "checkins/base.html" %}
+{% block title %}Delete set{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">Delete set?</h1>
+      <div class="text-secondary small">
+        {{ s.workout_exercise.exercise.name }} · {{ s.workout_exercise.get_equipment_display }}
+      </div>
+    </div>
+    <a class="btn btn-outline-secondary btn-sm"
+       href="{% url 'workout_detail' s.workout_exercise.workout.pk %}">
+      Cancel
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <p class="mb-3">
+        Delete <strong>Set #{{ s.set_number }}</strong>:
+        <strong>{{ s.weight_lb|default:"—" }} lb × {{ s.reps }}</strong> ?
+      </p>
+
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

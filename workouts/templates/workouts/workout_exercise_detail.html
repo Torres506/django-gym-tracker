@@ -1,0 +1,21 @@
+{% extends "checkins/base.html" %}
+{% block title %}Exercise{% endblock %}
+
+{% block content %}
+  <div class="mb-3">
+    <h1 class="h3 mb-0">
+      {{ item.exercise.name }} · {{ item.get_equipment_display }}
+    </h1>
+    <div class="text-secondary small">
+      Workout: {{ item.workout.date }}
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <p class="text-secondary">
+        No sets yet. This is where weight (lb) + reps will go.
+      </p>
+    </div>
+  </div>
+{% endblock %}

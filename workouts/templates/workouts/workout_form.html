@@ -1,0 +1,42 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}New workout{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+	<h1 class="h3 mb-0">
+  	   {% if editing %}Edit workout{% else %}New workout{% endif %}
+	</h1>
+      <div class="text-secondary small">Create a workout session</div>
+    </div>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'workout_list' %}">Back</a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">Date</label>
+          {{ form.date }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Title (optional)</label>
+          {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Notes (optional)</label>
+          {{ form.notes }}
+        </div>
+
+	<button class="btn btn-primary">
+  	  {% if editing %}Update workout{% else %}Save workout{% endif %}
+	</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

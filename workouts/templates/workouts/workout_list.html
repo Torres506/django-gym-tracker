@@ -1,0 +1,51 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}Workouts{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">Workouts</h1>
+      <div class="text-secondary small">Training log</div>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{% url 'workout_create' %}">+ New workout</a>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+      {% if workouts %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3 text-nowrap">Date</th>
+                <th class="text-nowrap">Title</th>
+                <th style="width: 55%;">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for w in workouts %}
+               <tr>
+		<td class="ps-3 text-nowrap">
+ 		 <a class="text-decoration-none" href="{% url 'workout_detail' w.pk %}">
+   		 {{ w.date }}
+ 		 </a>
+		</td>
+                  <td class="text-nowrap">{{ w.title|default:"—" }}</td>
+                  <td class="text-secondary" style="max-width: 650px; white-space: normal;">
+                    {{ w.notes|default:"—" }}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="p-4">
+          <div class="fw-semibold">No workouts yet.</div>
+          <div class="text-secondary">Create your first workout to start logging.</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

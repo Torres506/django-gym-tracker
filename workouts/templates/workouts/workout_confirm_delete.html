@@ -1,0 +1,26 @@
+{% extends "checkins/base.html" %}
+{% block title %}Delete workout{% endblock %}
+
+{% block content %}
+  <div class="mb-3">
+    <h1 class="h3 mb-0">Delete workout?</h1>
+    <div class="text-secondary small">
+      {{ workout.date }}{% if workout.title %} · {{ workout.title }}{% endif %}
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <p>This will delete the workout and all its exercises and sets.</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <a class="btn btn-outline-secondary"
+           href="{% url 'workout_detail' workout.pk %}">
+          Cancel
+        </a>
+        <button class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

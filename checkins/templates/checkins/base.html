@@ -25,12 +25,12 @@
           <a class="nav-link {% if request.path|slice:":10" == '/checkins/' %}active{% endif %}" href="/checkins/">Check-ins</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Workouts</a>
-        </li>
+	<li class="nav-item">
+ 	  <a class="nav-link" href="{% url 'workout_list' %}">Workouts</a>
+	</li>
 
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Stats</a>
+          <a class="nav-link" href="{% url 'workout_stats' %}">Stats</a>
         </li>
       </ul>
 

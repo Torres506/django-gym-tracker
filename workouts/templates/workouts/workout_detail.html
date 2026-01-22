@@ -1,0 +1,94 @@
+{% extends "checkins/base.html" %}
+{% block title %}Workout{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 mb-0">
+        {{ workout.date }}{% if workout.title %} · {{ workout.title }}{% endif %}
+      </h1>
+      {% if workout.notes %}
+        <div class="text-secondary small">{{ workout.notes }}</div>
+      {% endif %}
+    </div>
+
+    <div class="d-flex gap-2">
+      <a class="btn btn-primary btn-sm" href="{% url 'workout_add_exercise' workout.pk %}">
+        + Add exercise
+      </a>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'workout_edit' workout.pk %}">
+        Edit
+      </a>
+      <a class="btn btn-sm btn-outline-danger" href="{% url 'workout_delete' workout.pk %}">
+        Delete
+      </a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+      {% if items %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Exercise</th>
+                <th>Equipment</th>
+                <th class="pe-3 text-end">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for it in items %}
+                <tr>
+                  <td class="ps-3 fw-semibold">{{ it.exercise.name }}</td>
+                  <td>{{ it.get_equipment_display }}</td>
+                  <td class="text-end pe-3">
+                    <a class="btn btn-sm btn-outline-primary"
+                       href="{% url 'set_create' it.pk %}">
+                      + Set
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="3" class="bg-light">
+                    <div class="px-3 py-2 small">
+                      <span class="fw-semibold">Sets:</span>
+
+                      {% if it.sets.count %}
+                        {% for s in it.sets.all %}
+                          <span class="ms-2">
+                            Set {{ s.set_number }} — {{ s.weight_lb|default:"—" }} lb · {{ s.reps }} reps
+
+                            <a class="btn btn-sm btn-outline-secondary ms-1 py-0 px-1"
+                               href="{% url 'set_edit' s.pk %}">
+                              Edit
+                            </a>
+
+                            <a class="btn btn-sm btn-outline-danger ms-1 py-0 px-1"
+                               href="{% url 'set_delete' s.pk %}">
+                              ×
+                            </a>
+                          </span>
+                        {% endfor %}
+                      {% else %}
+                        <span class="text-muted ms-2">—</span>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      {% else %}
+        <div class="p-4">
+          <div class="fw-semibold">No exercises yet.</div>
+          <div class="text-secondary">Click “Add exercise” to start logging.</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
