@@ -13,5 +13,6 @@ urlpatterns = [
     path("<int:pk>/edit/", views.workout_edit, name="workout_edit"),
     path("<int:pk>/delete/", views.workout_delete, name="workout_delete"),
     path("stats/", views.workout_stats, name="workout_stats"),
+    path("exercise/<int:pk>/delete/", views.workout_exercise_delete, name="workout_exercise_delete"),
 
 ]

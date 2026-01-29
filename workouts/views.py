@@ -8,6 +8,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Workout, WorkoutExercise, SetEntry
 from .forms import WorkoutForm, WorkoutExerciseForm, SetEntryForm
 
+from django.shortcuts import get_object_or_404, redirect
+
+def workout_exercise_delete(request, pk):
+    we = get_object_or_404(WorkoutExercise, pk=pk)
+    workout_id = we.workout.id
+    we.delete()
+    return redirect("workout_detail", pk=workout_id)
+
 
 def workout_list(request):
     workouts = Workout.objects.all()
